@@ -1,9 +1,11 @@
 package br.com.a2tecnology.api.services.impl;
 
 import br.com.a2tecnology.api.domain.User;
+import br.com.a2tecnology.api.domain.dto.UserDto;
 import br.com.a2tecnology.api.repositories.UserRepository;
 import br.com.a2tecnology.api.services.UserService;
 import br.com.a2tecnology.api.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public User findById(Integer id) {
         Optional<User> obj = repository.findById(id);
@@ -24,5 +29,10 @@ public class UserServiceImpl implements UserService {
 
     public List<User> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public User create(UserDto obj) {
+        return repository.save(mapper.map(obj, User.class));
     }
 }
