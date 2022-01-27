@@ -33,7 +33,7 @@ class UserServiceImplTest {
     public static final String EMAIL                 = "rodrigo@email.com";
     public static final String PASSWORD              = "123";
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
-    public static final int INDEX                    = 0;
+    public static final Integer INDEX                    = 0;
     public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema";
 
     @InjectMocks
@@ -129,7 +129,7 @@ class UserServiceImplTest {
     void whenUpdateThenReturnSuccess() {
         when(repository.save(any())).thenReturn(user);
 
-        User response = service.create(userDto);
+        User response = service.update(userDto);
 
         assertNotNull(response);
         assertEquals(User.class, response.getClass());
@@ -151,7 +151,6 @@ class UserServiceImplTest {
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
             assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
         }
-
     }
 
     @Test
