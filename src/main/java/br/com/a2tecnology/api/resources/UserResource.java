@@ -1,6 +1,6 @@
 package br.com.a2tecnology.api.resources;
 
-import br.com.a2tecnology.api.domain.User;
+
 import br.com.a2tecnology.api.domain.dto.UserDto;
 import br.com.a2tecnology.api.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -17,13 +17,15 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/user")
 public class UserResource {
 
+    public static final String ID = "/{id}";
+
     @Autowired
     private UserService service;
 
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = ID)
     public ResponseEntity<UserDto> findById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDto.class));
     }
@@ -44,13 +46,13 @@ public class UserResource {
 
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UserDto> update(@PathVariable Integer id, @RequestBody UserDto obj) {
         obj.setId(id);
         return  ResponseEntity.ok().body(mapper.map(service.update(obj), UserDto.class));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = ID)
     public ResponseEntity<UserDto> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
