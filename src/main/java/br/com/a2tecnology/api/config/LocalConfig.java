@@ -17,7 +17,7 @@ public class LocalConfig {
     private UserRepository repository;
 
     @Bean
-    public void startDB(){
+    public void startDB() {
         User u1 = new User(null, "Rodrigo", "rodrigo@email.com", "123");
         User u2 = new User(null, "Juliana", "juliana@email.com", "123");
         User u3 = new User(null, "Alice", "alice@email.com", "123");

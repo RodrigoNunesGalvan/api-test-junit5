@@ -8,6 +8,7 @@ import br.com.a2tecnology.api.services.exceptions.DataIntegratyViolationExceptio
 import br.com.a2tecnology.api.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     private void findByEmail(UserDto obj) {
         Optional<User> user = repository.findByEmail(obj.getEmail());
         if(user.isPresent() && !user.get().getId().equals(obj.getId())) {
-            throw new DataIntegratyViolationException("E-mail já cadastrado no sistema");
+            throw new DataIntegrityViolationException("E-mail já cadastrado no sistema");
         }
     }
 }
