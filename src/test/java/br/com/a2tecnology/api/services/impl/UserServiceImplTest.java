@@ -5,17 +5,13 @@ import br.com.a2tecnology.api.domain.dto.UserDto;
 import br.com.a2tecnology.api.repositories.UserRepository;
 import br.com.a2tecnology.api.services.exceptions.DataIntegratyViolationException;
 import br.com.a2tecnology.api.services.exceptions.ObjectNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.lang.model.util.ElementScanner6;
 
 import java.util.List;
 import java.util.Optional;
