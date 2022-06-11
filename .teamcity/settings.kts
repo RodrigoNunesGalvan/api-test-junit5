@@ -29,8 +29,6 @@ version = "2022.04"
 
 project {
 
-    vcsRoot(MyVcsRoot)
-
     val bts = sequential {
         buildType(Maven("Build", "clean compile"))
         parallel {
@@ -47,19 +45,13 @@ project {
         }
     }
 }
-object MyVcsRoot: GitVcsRoot({
-    name = DslContext.getParameter("vcsName")
-    url =  DslContext.getParameter("vcsUrl")
-    branch = DslContext.getParameter("vcsBranch", "refs/heads/develop")
-})
-
 
 class Maven(name: String, goals: String, runnerArgs: String? = null): BuildType({
     id(name.toExtId())
     this.name = name
 
     vcs {
-        root(MyVcsRoot)
+        root(DslContext.settingsRoot)
     }
 
     steps {
