@@ -1,4 +1,3 @@
-import com.sun.tools.classfile.Dependencies
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
