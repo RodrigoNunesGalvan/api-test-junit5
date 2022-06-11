@@ -40,8 +40,7 @@ object Build : BuildType({
 
     steps {
         maven {
-            val myMavenGoal = "clean install"
-            goals = myMavenGoal
+            goals = "clean install"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
