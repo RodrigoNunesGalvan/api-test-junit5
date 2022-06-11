@@ -53,6 +53,7 @@ object MyVcsRoot: GitVcsRoot({
     branch = DslContext.getParameter("vcsBranch", "refs/heads/develop")
 })
 
+
 class Maven(name: String, goals: String, runnerArgs: String? = null): BuildType({
     id(name.toExtId())
     this.name = name
