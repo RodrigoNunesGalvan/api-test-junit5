@@ -1,4 +1,3 @@
-import com.sun.tools.classfile.Dependencies
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -30,20 +29,6 @@ version = "2022.04"
 project {
 
     buildType(Build)
-    buildType(Package)
-    buildType(FastTest)
-    buildType(SlowTest)
-
-    sequential {
-        buildType(Build)
-        parallel {
-            buildType(FastTest)
-            buildType(SlowTest)
-        }
-        buildType(FastTest)
-        buildType(SlowTest)
-        buildType(Package)
-    }
 }
 
 object Build : BuildType({
@@ -55,59 +40,10 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "clean compile"
+            goals = "clean install"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
-})
-
-object FastTest: BuildType({
-    name = "Fast Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.resources.*Test"
-        }
-    }
-})
-
-bject SlowTest: BuildType({
-    name = "Slow Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.services.*Test"
-        }
-    }
-})
-
-object Package : BuildType({
-    name = "Package"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean package"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
-        }
-    }
-
-//    dependencies {
-//        snapshot(Build) {}
-//    }
 
     triggers {
         vcs {
