@@ -2,6 +2,7 @@ import com.sun.tools.classfile.Dependencies
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
+import kotlin.script.templates.standard.ScriptTemplateWithArgs
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -29,25 +30,25 @@ version = "2022.04"
 
 project {
 
-    buildType(Build)
-    buildType(Package)
-    buildType(FastTest)
-    buildType(SlowTest)
-
-    sequential {
-        buildType(Build)
+    val bts = sequential {
+        buildType(Maven("Build", "clean compile"))
         parallel {
-            buildType(FastTest)
-            buildType(SlowTest)
+            buildType(Maven("FastTest", "clean test", "-Dmaven.test.failure.ignore=true -Dtest=*.resources.*Test"))
+            buildType(Maven("SlowTest", "clean test", "-Dmaven.test.failure.ignore=true -Dtest=*.services.*Test"))
         }
-        buildType(FastTest)
-        buildType(SlowTest)
-        buildType(Package)
+        buildType(Maven("Package", "clean package", "-DskipTests"))
+    }.buildTypes()
+
+    bts.forEach { buildType(iterator)}
+    bts.last().triggrers {
+        vcs {
+
+        }
     }
 }
 
-object Build : BuildType({
-    name = "Build"
+class Maven(name: String, goals: String, runnerArgs: String? = null): BuildType({
+    this.name = name
 
     vcs {
         root(DslContext.settingsRoot)
@@ -55,62 +56,9 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "clean compile"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
+            this.goals = goals
+            this.runnerArgs = runnerArgs
         }
     }
 })
 
-object FastTest: BuildType({
-    name = "Fast Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.resources.*Test"
-        }
-    }
-})
-
-bject SlowTest: BuildType({
-    name = "Slow Test"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -Dtest=*.services.*Test"
-        }
-    }
-})
-
-object Package : BuildType({
-    name = "Package"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean package"
-            runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
-        }
-    }
-
-//    dependencies {
-//        snapshot(Build) {}
-//    }
-
-    triggers {
-        vcs {
-        }
-    }
-})
