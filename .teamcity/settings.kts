@@ -1,3 +1,4 @@
+import com.sun.tools.classfile.Dependencies
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -29,6 +30,12 @@ version = "2022.04"
 project {
 
     buildType(Build)
+    buildType(Package)
+
+    sequential {
+        buildType(Build)
+        buildType(Package)
+    }
 }
 
 object Build : BuildType({
@@ -40,10 +47,34 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "clean install"
+            goals = "clean compile"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
+
+    triggers {
+        vcs {
+        }
+    }
+})
+
+object Package : BuildType({
+    name = "Package"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        maven {
+            goals = "clean package"
+            runnerArgs = "-Dmaven.test.failure.ignore=true -DskipTests"
+        }
+    }
+
+//    dependencies {
+//        snapshot(Build) {}
+//    }
 
     triggers {
         vcs {
