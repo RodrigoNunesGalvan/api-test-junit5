@@ -51,11 +51,6 @@ object Build : BuildType({
             runnerArgs = "-Dmaven.test.failure.ignore=true"
         }
     }
-
-    triggers {
-        vcs {
-        }
-    }
 })
 
 object Package : BuildType({
