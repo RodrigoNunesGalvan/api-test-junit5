@@ -34,6 +34,10 @@ project {
 object Build : BuildType({
     name = "Build"
 
+    enablePersonalBuilds = false
+    type = BuildTypeSettings.Type.DEPLOYMENT
+    maxRunningBuilds = 1
+
     vcs {
         root(DslContext.settingsRoot)
     }
