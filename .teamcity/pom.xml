@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <name>ApiTestJunit5 Config DSL Script</name>
-  <groupId>ApiTestJunit5</groupId>
-  <artifactId>ApiTestJunit5_dsl</artifactId>
+  <name>api</name>
+  <groupId>br.com.a2tecnology</groupId>
+  <artifactId>api</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <parent>
