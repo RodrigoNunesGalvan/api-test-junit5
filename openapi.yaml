@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: API teste choreo
+  description: API teste choreo
+  version: 1.0.0
+servers:
+  - url: 'https'
+paths:
+  /user/{id}:
+    get:
+      summary: Api teste choreo
+      description: Api teste choreo
+      tags:
+        - teste choreo
+      parameters:
+        - name: id
+          in: query
+          description: Get User por Id
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+      deprecated: false
+      security: []
+
+  

@@ -19,11 +19,14 @@ public class UserResource {
 
     public static final String ID = "/{id}";
 
-    @Autowired
-    private UserService service;
+    private final UserService service;
 
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
+
+    public UserResource(UserService service, ModelMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    }
 
     @GetMapping(value = ID)
     public ResponseEntity<UserDto> findById(@PathVariable Integer id) {
