@@ -1,6 +1,10 @@
-FROM openjdk:11
+FROM openjdk:11-jre-slim-buster
 
 ENV TZ='GMT-3'
+
+WORKDIR /app
+
+COPY target/api-test-junit5.jar .
 
 VOLUME /tmp
 
