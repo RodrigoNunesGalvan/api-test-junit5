@@ -56,8 +56,8 @@ RUN mvn package
 FROM openjdk:11-jre-slim
 
 # Cria um usuário para rodar a aplicação
-RUN addgroup --system --gid 10014 choreo && \
-    adduser --system --uid 10014 --ingroup choreo choreouser
+RUN addgroup --system --gid 100014 choreo && \
+    adduser --system --uid 100014 --ingroup choreo choreouser
 
 # Copia o arquivo JAR gerado para dentro da imagem
 COPY --from=build-env /app/target/api-test-junit5.jar /app/api-test-junit5.jar
