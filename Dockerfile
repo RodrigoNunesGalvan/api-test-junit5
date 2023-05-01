@@ -1,10 +1,6 @@
 FROM openjdk:11
 
-WORKDIR /app
-
 ENV TZ='GMT-3'
-
-COPY . .
 
 VOLUME /tmp
 
