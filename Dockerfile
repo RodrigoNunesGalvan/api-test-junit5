@@ -1,69 +1,37 @@
-#FROM openjdk:11-jre-slim-buster
-#
-#ENV TZ='GMT-3'
-#
-#WORKDIR /app
-#
-#COPY target/api-test-junit5.jar .
-#
-#VOLUME /tmp
-#
-#EXPOSE 8080
-#
-#ARG JAR_FILE=target/*.jar
-#
-#ADD ${JAR_FILE} api-test-junit5.jar
-#
-#RUN adduser \
-#    --disabled-password \
-#    --gecos "" \
-#    --home "/nonexistent" \
-#    --shell "/sbin/nologin" \
-#    --no-create-home \
-#    --uid 10014 \
-#    "choreo"
-## Use the above created unprivileged user
-#USER 10014
-#
-#
-#ENTRYPOINT ["java","-Xmx1g","-jar","/api-test-junit5.jar"]
+# Docker multi-stage build
 
-FROM openjdk:11-jdk-slim as build-env
+# 1. Building the App with Maven
+FROM maven:3.8.7-eclipse-temurin-19-alpine
 
-# Instala o Maven
-RUN apt-get update && \
-    apt-get install -y maven
+ADD . /java-springboot
+WORKDIR /java-springboot
 
-# Cria um diretório para a aplicação
-RUN mkdir /app
+# Just echo so we can see, if everything is there 🙂
+RUN ls -l
 
-# Define o diretório de trabalho como /app
-WORKDIR /app
+# Run Maven build
+RUN mvn clean install
 
-# Copia o arquivo pom.xml
-COPY pom.xml .
+# 2. Just using the build artifact and then removing the build-container
+FROM openjdk:19-alpine
 
-# Baixa as dependências do Maven - isso será cacheado se o pom.xml não mudar
-RUN mvn dependency:go-offline
+# https://security.alpinelinux.org/vuln/CVE-2021-46848
+RUN apk add --upgrade libtasn1-progs
 
-# Copia o código-fonte da aplicação
-COPY src ./src
+# https://security.alpinelinux.org/vuln/CVE-2022-37434
+RUN apk update && apk upgrade zlib
 
-# Compila a aplicação
-RUN mvn package
 
-# Cria uma imagem menor para a execução
-FROM openjdk:11-jre-slim
+# Create a new user with UID 10014
+RUN addgroup -g 10014 choreo && \
+    adduser  --disabled-password  --no-create-home --uid 10014 --ingroup choreo choreouser
 
-# Cria um usuário para rodar a aplicação
-RUN addgroup --system --gid 10001 choreo && \
-    adduser --system --uid 10001 --ingroup choreo choreouser
+VOLUME /tmp
 
-# Copia o arquivo JAR gerado para dentro da imagem
-COPY --from=build-env /app/target/api-test-junit5.jar /app/api-test-junit5.jar
+USER 10014
 
-# Define o usuário que irá executar a aplicação
-USER choreouser
+# Add Spring Boot app.jar to Container
+COPY --from=0 "/java-springboot/target/api-test-junit5.jar" app.jar
 
-# Define o comando para iniciar a aplicação
-CMD ["java", "-jar", "/app/api-test-junit5.jar"]
+# Fire up our Spring Boot app by default
+CMD [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
