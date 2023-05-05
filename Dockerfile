@@ -1,7 +1,7 @@
 # Docker multi-stage build
 
 # 1. Building the App with Maven
-FROM maven:3.8.7-eclipse-temurin-19-alpine
+FROM openjdk:11
 
 ADD . /java-springboot
 WORKDIR /java-springboot
@@ -13,7 +13,7 @@ RUN ls -l
 RUN mvn clean install
 
 # 2. Just using the build artifact and then removing the build-container
-FROM openjdk:19-alpine
+FROM openjdk:11
 
 # https://security.alpinelinux.org/vuln/CVE-2021-46848
 RUN apk add --upgrade libtasn1-progs
