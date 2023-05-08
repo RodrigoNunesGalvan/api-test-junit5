@@ -23,8 +23,7 @@ FROM openjdk:11
 
 
 # Create a new user with UID 10014
-RUN adduser --disabled-password --no-create-home --uid 10014 --ingroup choreo choreouser
-
+RUN addgroup -g 10014 choreo && adduser  --disabled-password  --no-create-home --uid 10014 --ingroup choreo choreouser
 
 VOLUME /tmp
 
