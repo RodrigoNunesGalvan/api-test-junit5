@@ -6,14 +6,14 @@ FROM openjdk:11
 ADD . /java-springboot
 WORKDIR /java-springboot
 
-# Just echo so we can see, if everything is there 🙂
-RUN ls -l
-
-# Run Maven build
-RUN mvn clean install
-
-# 2. Just using the build artifact and then removing the build-container
-FROM openjdk:11
+## Just echo so we can see, if everything is there 🙂
+#RUN ls -l
+#
+## Run Maven build
+#RUN mvn clean install
+#
+## 2. Just using the build artifact and then removing the build-container
+#FROM openjdk:11
 
 # https://security.alpinelinux.org/vuln/CVE-2021-46848
 #RUN opt add --upgrade libtasn1-progs
@@ -23,8 +23,8 @@ FROM openjdk:11
 
 
 # Create a new user with UID 10014
-RUN sudo addgroup -g 10014 choreo && \
-    sudo adduser  --disabled-password  --no-create-home --uid 10014 --ingroup choreo choreouser
+RUN addgroup -g 10014 choreo && \
+    adduser  --disabled-password  --no-create-home --uid 10014 --ingroup choreo choreouser
 
 VOLUME /tmp
 
