@@ -16,10 +16,10 @@ RUN mvn clean install
 FROM openjdk:11
 
 # https://security.alpinelinux.org/vuln/CVE-2021-46848
-RUN opt add --upgrade libtasn1-progs
-
-# https://security.alpinelinux.org/vuln/CVE-2022-37434
-RUN opt update && opt upgrade zlib
+#RUN opt add --upgrade libtasn1-progs
+#
+## https://security.alpinelinux.org/vuln/CVE-2022-37434
+#RUN opt update && opt upgrade zlib
 
 
 # Create a new user with UID 10014
