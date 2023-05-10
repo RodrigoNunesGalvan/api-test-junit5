@@ -23,10 +23,6 @@ paths:
         200:
           description: Successful response
           content:
-            text/plain:
-              schema:
-                type: string
-      deprecated: false
-      security: []
+            application/json: {}
 
   
