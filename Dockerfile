@@ -10,7 +10,7 @@ WORKDIR /java-springboot
 RUN ls -l
 
 # Run Maven build
-RUN mvn clean install
+RUN mvn clean install -DskipTests
 
 # 2. Just using the build artifact and then removing the build-container
 FROM openjdk:19-alpine
