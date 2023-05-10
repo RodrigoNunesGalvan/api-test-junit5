@@ -31,7 +31,7 @@ VOLUME /tmp
 USER 10014
 
 # Add Spring Boot app.jar to Container
-COPY --from=0 "/java-springboot/target/api-test-junit5.jar" api-test-junit5.jar
+COPY --from=0 "/java-springboot/target/api-*.jar" app.jar
 
 # Fire up our Spring Boot app by default
-CMD [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /api-test-junit5.jar" ]
+CMD [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
