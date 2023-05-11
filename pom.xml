@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.a2tecnology</groupId>
 	<artifactId>api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>api</name>
 	<description>API REST END TO END</description>
 	<properties>
